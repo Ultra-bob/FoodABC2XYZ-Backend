@@ -43,7 +43,7 @@ def ai_describe():
     message = client.chat.completions.create(
         model="gpt-4-turbo",
         max_tokens=1024,
-        messages=history
+        messages=history,
     )
 
     session_id = str(uuid4())
@@ -58,14 +58,16 @@ def ai_describe():
 @app.route("/reimagine", methods=["POST"])
 def ai_reimagine():
     print(request.get_json())
-    history = sessions[request.get_json()["session_id"]]
-    #TODO include the image as well because it might help
+    history = sessions[request.get_json()["session_id"]][1:]
     history.append({"role": "user", "content": reimagine_prompt.format(request.get_json()["change"])})
     print("Requesting idea...")
+    print(history)
+
     message = client.chat.completions.create(
         model="gpt-4-turbo",
         max_tokens=1024,
-        messages=history
+        messages=history,
+        temperature=0.7
     )
     history.append(message.choices[0].message)
     print(message.choices[0].message.content)
@@ -81,8 +83,8 @@ def ai_reimagine():
 
     print(text)
 
-    ingredients = [s.strip() for s in re.search(r"(- .+\n)+", text).group(0).split("- ") if s.strip()]
-    steps = [s.split('. ')[1].strip() for s in re.search(r"(\d+\. .+\n)+", text + "\n").group(0).splitlines() if s.strip()]
+    ingredients = [s.strip() for s in re.search(r"(- .+\n+)+", text).group(0).split("- ") if s.strip()]
+    steps = [s.split('. ')[1].strip() for s in re.search(r"(\d+\. .+\n+)+", text + "\n").group(0).splitlines() if s.strip()]
 
     print(ingredients)
     print(steps)  

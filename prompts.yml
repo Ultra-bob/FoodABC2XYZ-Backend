@@ -11,7 +11,7 @@ REIMAGINE_STEP: |
   {}
 
 RECIPE_STEP: |
-  Please create a recipe for this altered dish based on your description above:
+  Please create a recipe for this altered dish based on your description above (Do not use any bold or italic tags):
   INGREDIENTS: The ingredients and their amounts (eg. red bell pepper, 400g), in a dashed list (dashes with newlines)
   INSTRUCTIONS: The steps to create the dish (newlines separated with numbers)
 
